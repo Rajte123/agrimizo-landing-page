@@ -1,0 +1,51 @@
+<%- include('../../partials/header', { title: project.title || 'Current Project' }) %>
+
+<!-- Hero -->
+<section id="home" class="hero-section">
+  <div class="hero-text container">
+    <h1><%= project.title %></h1>
+  </div>
+</section>
+
+<!-- Objective -->
+<section class="py-5 text-center bg-white">
+  <div class="container">
+    <h2 class="section-title">Our Objective</h2>
+    <div class="row g-4">
+      <% project.objectives.forEach((objective, index) => { %>
+        <div class="col-md-4">
+          <div class="p-4 bg-light rounded shadow-sm h-100 service-card">
+            <h4><%= ['', '', ''][index] || '' %> Objective <%= index + 1 %></h4>
+            <p><%= objective %></p>
+          </div>
+        </div>
+      <% }) %>
+
+      <div class="mt-5 text-center">
+        <h2 class="mb-4">Proposed Architecture</h2>
+        <img
+          src="/uploads/<%= project.proposed_architecture %>"
+          alt="Proposed Architecture"
+          class="img-fluid rounded shadow border"
+          style="max-width: 100%; height: auto"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Outcomes -->
+<section class="py-5 bg-white">
+  <div class="container">
+    <h2 class="section-title text-center">Outcomes</h2>
+    <ul class="list-group list-group-flush">
+      <% project.outcomes.forEach((outcome, index) => { %>
+        <li class="list-group-item">
+          <span class="badge bg-primary outcome-badge"><%= index + 1 %></span> <%= outcome %>
+        </li>
+      <% }) %>
+    </ul>
+  </div>
+</section>
+
+<%- include('../../partials/footer') %>

@@ -1,0 +1,167 @@
+<%- include('../partials/header', { title: 'Admin - Manage Current Projects' }) %>
+
+<section class="py-5" style="background: linear-gradient(to right, #f8f9fa, #e3f2fd); min-height: 100vh;">
+  <div class="container">
+
+    <div class="d-flex justify-content-end mb-3">
+      <a href="/admin/logout" class="btn btn-outline-danger">
+        <i class="fas fa-sign-out-alt me-2"></i> Logout
+      </a>
+    </div>
+    
+  
+    <!-- Add New Project Form -->
+    <div class="card shadow-lg mb-5 border-0" style="border-radius: 20px; background: #ffffffee;">
+      <div class="card-header text-white text-center" style="border-radius: 20px 20px 0 0; background: linear-gradient(to right, #00c9ff, #92fe9d);">
+        <h3 class="mb-0 fw-bold"><i class="fas fa-plus-circle me-2"></i>Add New Current Project</h3>
+      </div>
+      <div class="card-body p-4">
+        <form action="/admin/current-project" method="POST" enctype="multipart/form-data">
+          <div class="mb-4">
+            <label for="title" class="form-label fw-semibold">Project Title</label>
+            <input type="text" name="title" id="title" class="form-control form-control-lg rounded-pill shadow-sm" placeholder="Enter project title" required>
+          </div>
+
+          <div class="mb-4">
+            <label for="objectives" class="form-label fw-semibold">Objectives</label>
+            <textarea name="objectives" id="objectives" class="form-control shadow-sm" rows="3" placeholder="Separate each objective with a semicolon (;)..." required></textarea>
+            <small class="text-muted">Example: Objective 1; Objective 2; Objective 3</small>
+          </div>
+
+          <div class="mb-4">
+            <label for="outcomes" class="form-label fw-semibold">Outcomes</label>
+            <textarea name="outcomes" id="outcomes" class="form-control shadow-sm" rows="3" placeholder="Separate each outcome with a semicolon (;)..." required></textarea>
+            <small class="text-muted">Example: Outcome 1; Outcome 2; Outcome 3</small>
+          </div>
+
+          <div class="mb-4">
+            <label for="github_link" class="form-label fw-semibold">GitHub Link</label>
+            <input type="url" name="link" id="link" class="form-control form-control-lg rounded-pill shadow-sm" placeholder="Enter GitHub repository URL" required>
+          </div>
+          
+
+          <div class="mb-4">
+            <label for="architecture" class="form-label fw-semibold">Upload Architecture Image</label>
+            <input type="file" name="architecture" id="architecture" class="form-control shadow-sm" accept="image/*" required>
+          </div>
+
+          <div class="text-center">
+            <button type="submit" class="btn btn-success btn-lg rounded-pill px-5">
+              <i class="fas fa-upload me-2"></i>Submit Project
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Project List Table -->
+    <div class="card shadow-lg border-0" style="border-radius: 20px;">
+      <div class="card-header text-center text-white" style="border-radius: 20px 20px 0 0; background: linear-gradient(to right, #6a11cb, #2575fc);">
+        <h3 class="fw-bold mb-0"><i class="fas fa-list me-2"></i>Uploaded Projects</h3>
+      </div>
+      <div class="card-body table-responsive">
+        <table class="table table-hover align-middle text-center table-bordered" style="border-radius: 15px; overflow: hidden;">
+          <thead class="text-white" style="background: linear-gradient(to right, #232526, #414345);">
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Objectives</th>
+              <th>Outcomes</th>
+              <th>GitHub</th>
+              <th>Architecture</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% allProjects.forEach((p, index) => { %>
+              <tr>
+                <td><%= index + 1 %></td>
+                <td class="fw-bold text-info"><%= p.title %></td>
+                <td class="text-start">
+                  <ul class="list-unstyled mb-0">
+                    <% p.objectives.forEach(obj => { %>
+                      <li><i class="fas fa-check-circle text-success me-2"></i><%= obj %></li>
+                    <% }) %>
+                  </ul>
+                </td>
+                <td class="text-start">
+                  <ul class="list-unstyled mb-0">
+                    <% p.outcomes.forEach(out => { %>
+                      <li><i class="fas fa-star text-warning me-2"></i><%= out %></li>
+                    <% }) %>
+                  </ul>
+                </td>
+                <td>
+                  <% if (p.link) { %>
+                    <a href="<%= p.link %>" target="_blank" class="btn btn-sm btn-dark">                  
+                      <i class="fab fa-github"></i> View Code
+                    </a>
+                  <% } else { %>
+                    <span class="text-muted">N/A</span>
+                  <% } %>
+                </td>                
+                <td>
+                  <img src="/uploads/<%= p.proposed_architecture %>" class="img-thumbnail rounded shadow" style="width: 120px; height: auto;" />
+                </td>
+                <td>
+                  <button class="btn btn-outline-warning btn-sm mb-2" data-bs-toggle="modal" data-bs-target="#editModal<%= p.id %>">
+                    <i class="fas fa-edit me-1"></i>Edit
+                  </button>
+                  <form action="/admin/current-project/delete/<%= p.id %>" method="POST" style="display:inline;">
+                    <button class="btn btn-outline-danger btn-sm" onclick="return confirm('Delete this project?')">
+                      <i class="fas fa-trash-alt me-1"></i>Delete
+                    </button>
+                  </form>
+
+                  <!-- Edit Modal -->
+                  <div class="modal fade" id="editModal<%= p.id %>" tabindex="-1" aria-labelledby="editModalLabel<%= p.id %>" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                      <div class="modal-content rounded-4">
+                        <form action="/admin/current-project/update/<%= p.id %>" method="POST" enctype="multipart/form-data">
+                          <div class="modal-header bg-dark text-white">
+                            <h5 class="modal-title" id="editModalLabel<%= p.id %>">Edit Project</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                          </div>
+                          <div class="modal-body">
+                            <div class="mb-3">
+                              <label class="form-label fw-semibold">Title</label>
+                              <input type="text" name="title" class="form-control" value="<%= p.title %>" required />
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label fw-semibold">Objectives</label>
+                              <textarea name="objectives" class="form-control" rows="3" required><%= p.objectives.join(';') %></textarea>
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label fw-semibold">Outcomes</label>
+                              <textarea name="outcomes" class="form-control" rows="3" required><%= p.outcomes.join(';') %></textarea>
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label fw-semibold">GitHub Link</label>
+                              <input type="url" name="link" class="form-control" value="<%= p.link %>" required />
+                            </div>
+                            
+                            <div class="mb-3">
+                              <label class="form-label fw-semibold">Current Image</label><br>
+                              <img src="/uploads/<%= p.proposed_architecture %>" class="img-fluid rounded shadow-sm mb-2" style="max-width: 200px;" />
+                              <input type="file" name="architecture" class="form-control mt-2" accept="image/*" />
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-outline-primary">Update</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

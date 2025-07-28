@@ -1,0 +1,20 @@
+{
+  "name": "agrimizo",
+  "version": "1.0.0",
+  "description": "Agrimizo website",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.2",
+    "multer": "^2.0.1",
+    "pg": "^8.16.3"
+  },
+  "author": "Rajdip Roy",
+  "license": "ISC"
+}
