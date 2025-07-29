@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 🌾 Mizoram Smart Farming
 🧠 AI-powered Smart Farming System for Mizoram
 A web-based intelligent system that supports farmers in Mizoram by providing:
@@ -62,3 +63,6 @@ Pest outbreaks without early warning
 
 This project aims to bridge the gap using affordable, AI-driven tools.
 
+=======
+# agrimizo-landing-page
+>>>>>>> d48d59a (Initial commit)
