@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 import express from "express";
 import session from "express-session";
 import path from "path";
@@ -6,13 +8,19 @@ import { fileURLToPath } from "url";
 import pkg from 'pg';
 const { Pool } = pkg;
 
+// const pool = new Pool({
+//   user: 'postgres',
+//   host: 'localhost',
+//   database: 'agritech',
+//   password: '123456789',
+//   port: 5432,
+// });
+
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'agritech',
-  password: '123456789',
-  port: 5432,
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
 });
+
 
 const app = express();
 const port = 3000;
@@ -50,7 +58,8 @@ function checkAdmin(req, res, next) {
   }
 }
 
-// Routes
+// Route
+
 app.get("/", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM current_projects ORDER BY id DESC");
@@ -73,9 +82,10 @@ app.get("/current-project/:id", async (req, res) => {
   }
 });
 
-app.get("/team", (req, res) => {
-  res.render("sections/team/cv");
-});
+// app.get("/team", (req, res) => {
+//   res.render("sections/team/ourteams", { project: { title: "Meet Our Team" } });
+// });
+
 
 // Admin Login
 app.get("/admin/login", (req, res) => {

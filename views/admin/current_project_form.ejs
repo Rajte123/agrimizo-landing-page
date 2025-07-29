@@ -80,10 +80,20 @@
                 <td class="text-start">
                   <ul class="list-unstyled mb-0">
                     <% p.objectives.forEach(obj => { %>
-                      <li><i class="fas fa-check-circle text-success me-2"></i><%= obj %></li>
+                      <li>
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        <% if (p.link) { %>
+                          <a href="<%= p.link %>" target="_blank" class="text-decoration-none text-dark">
+                            <%= obj %> <i class="fas fa-external-link-alt text-muted ms-1" style="font-size: 0.8em;"></i>
+                          </a>
+                        <% } else { %>
+                          <%= obj %>
+                        <% } %>
+                      </li>
                     <% }) %>
                   </ul>
                 </td>
+                              
                 <td class="text-start">
                   <ul class="list-unstyled mb-0">
                     <% p.outcomes.forEach(out => { %>
