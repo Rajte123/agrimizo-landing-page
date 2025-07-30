@@ -3,16 +3,26 @@ import session from "express-session";
 import path from "path";
 import multer from "multer";
 import { fileURLToPath } from "url";
+
+
+// const pool = new Pool({
+//   user: 'postgres',
+//   host: 'localhost',
+//   database: 'agritech',
+//   password: '123456789',
+//   port: 5432,
+// });
+
 import pkg from 'pg';
 const { Pool } = pkg;
 
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'agritech',
-  password: '123456789',
-  port: 5432,
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
+
 
 const app = express();
 const port = 3000;
