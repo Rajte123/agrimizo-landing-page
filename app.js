@@ -1,5 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
 import express from "express";
 import session from "express-session";
 import path from "path";
@@ -8,19 +6,13 @@ import { fileURLToPath } from "url";
 import pkg from 'pg';
 const { Pool } = pkg;
 
-// const pool = new Pool({
-//   user: 'postgres',
-//   host: 'localhost',
-//   database: 'agritech',
-//   password: '123456789',
-//   port: 5432,
-// });
-
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
+  user: 'postgres',
+  host: 'localhost',
+  database: 'agritech',
+  password: '123456789',
+  port: 5432,
 });
-
 
 const app = express();
 const port = 3000;
