@@ -1,11 +1,12 @@
 import dotenv from "dotenv";
-dotenv.config();
+import pkg from 'pg';
 import express from "express";
 import session from "express-session";
 import path from "path";
 import multer from "multer";
 import { fileURLToPath } from "url";
 
+dotenv.config();
 
 // const pool = new Pool({
 //   user: 'postgres',
@@ -18,7 +19,7 @@ import { fileURLToPath } from "url";
 
 
 
-import pkg from 'pg';
+
 const { Pool } = pkg;
 
 const pool = new Pool({
