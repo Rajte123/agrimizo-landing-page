@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 import express from "express";
 import session from "express-session";
 import path from "path";
@@ -12,6 +14,9 @@ import { fileURLToPath } from "url";
 //   password: '123456789',
 //   port: 5432,
 // });
+
+
+
 
 import pkg from 'pg';
 const { Pool } = pkg;
